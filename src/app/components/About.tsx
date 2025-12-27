@@ -53,7 +53,7 @@ export default function About() {
 
       {/* Involvement */}
       <p className="text-sm mt-2 text-muted">
-       - If am not coding I love to working out, playing soccer, and recently I am enjoying during 3D Motion Videos
+       - If am not coding I love to working out, playing soccer,Cinematography, and recently I am enjoying during 3D Motion Videos
       </p>
 
       {/* Socials */}
