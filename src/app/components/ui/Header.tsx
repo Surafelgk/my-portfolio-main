@@ -615,7 +615,7 @@ const Header = () => {
                       opacity: 0
                     }}
                     animate={{
-                      y: [null, y => y - 100],
+                      y: [0, -100],
                       opacity: [0, 0.2, 0]
                     }}
                     transition={{
