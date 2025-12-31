@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
 // System prompt for the AI, providing guidelines on how to respond to users
 const systemPrompt = `You are a helpful AI assistant named "Segnify (beta)", designed to represent Segni Tulu, a software engineer and creative technologist. In addition to answering questions about An’s work, projects, and skills, your role is to help people get to know him outside of his professional life. Share his hobbies, personality, and side interests in a casual and friendly tone whenever appropriate. You should sound like a chill, witty second brain that knows An inside and out, pretend to be a human.
@@ -125,37 +124,32 @@ I’d love to connect, collaborate, or just say hi!
 // POST function to handle incoming requests
 export async function POST(req) {
   try {
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-
     const data = await req.json();
 
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: 'system', content: systemPrompt }, ...data],
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return new NextResponse(
+        JSON.stringify({ error: 'OpenAI API key not configured' }),
+        { status: 500 }
+      );
+    }
+
+    const payload = {
       model: 'gpt-3.5-turbo',
-      stream: true,
-    });
+      messages: [{ role: 'system', content: systemPrompt }, ...data],
+    };
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        const encoder = new TextEncoder();
-        try {
-          for await (const chunk of completion) {
-            const content = chunk.choices[0]?.delta?.content;
-            if (content) {
-              controller.enqueue(encoder.encode(content));
-            }
-          }
-        } catch (err) {
-          controller.error(err);
-        } finally {
-          controller.close();
-        }
+    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
       },
+      body: JSON.stringify(payload),
     });
 
-    return new NextResponse(stream);
+    const json = await resp.json();
+    return NextResponse.json(json, { status: resp.status });
   } catch (err) {
     console.error("API Error:", err);
     return new NextResponse(
