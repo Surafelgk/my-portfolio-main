@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { useLanguage } from "../../../context/LanguageContext";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform, useAnimation } from "framer-motion";
 
@@ -135,55 +136,18 @@ const Header = () => {
     []
   );
 
-  // Language state and translations
-  const [lang, setLang] = useState<"en" | "am">("en");
-
-  const translations = useMemo(() => ({
-    en: {
-      nav: {
-        about: "About",
-        experience: "Experience",
-        projects: "Projects",
-        contacts: "Contact",
-      },
-      headerRole: "Web Developer & Digital Marketer",
-      quickInfo: [
-        "Based in Addis Ababa, Ethiopia",
-        "Full-Stack Developer",
-        "Digital Marketing Specialist",
-        "Available for freelance projects",
-      ],
-      getInTouch: "Get In Touch",
-      pressEsc: "Press ESC to close",
-    },
-    am: {
-      nav: {
-        about: "ስለ እኔ",
-        experience: "ልምድ",
-        projects: "ፕሮጀክቶች",
-        contacts: "አገናኝ",
-      },
-      headerRole: "የድህረ-ድር እና ዲጂታል አሰራር",
-      quickInfo: [
-        "ከአዲስ አበባ የተመነ",
-        "Full-Stack አባል",
-        "ዲጂታል ማርኬቲንግ ስራ",
-        "ለፍሪላንስ እገኛ",
-      ],
-      getInTouch: "ያግኙኝ",
-      pressEsc: "ESC ን ይጫኑ ለመዝጋት",
-    }
-  }), []);
+  // Use global language context
+  const { lang, setLang, t } = useLanguage();
 
   // Derived nav items using current language
   const localizedNavItems: NavItem[] = useMemo(() => (
     [
-      { id: "about", label: translations[lang].nav.about, icon: "👤" },
-      { id: "experience", label: translations[lang].nav.experience },
-      { id: "projects", label: translations[lang].nav.projects },
-      { id: "contacts", label: translations[lang].nav.contacts },
+      { id: "about", label: t.nav.about, icon: "👤" },
+      { id: "experience", label: t.nav.experience },
+      { id: "projects", label: t.nav.projects },
+      { id: "contacts", label: t.nav.contacts },
     ]
-  ), [lang, translations]);
+  ), [t]);
 
   // Smooth scroll with animation
   const scrollToSection = useCallback(async (id: string) => {
@@ -567,17 +531,7 @@ const Header = () => {
               ))}
             </motion.nav>
 
-            {/* Language toggle (desktop) */}
-            <div className="hidden md:flex items-center ml-3">
-              <button
-                onClick={() => setLang(lang === "en" ? "am" : "en")}
-                className="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                aria-label="Toggle language"
-              >
-                <span className="text-lg">{lang === "en" ? "🇬🇧" : "🇪🇹"}</span>
-                <span className="text-sm font-medium">{lang === "en" ? "EN" : "አማ"}</span>
-              </button>
-            </div>
+            {/* Language selector removed */}
 
             {/* Mobile Menu Button with Blue Theme */}
             <motion.div
@@ -738,27 +692,20 @@ const Header = () => {
                         transition={{ delay: 0.3 }}
                         className="text-sm text-gray-600"
                       >
-                          {translations[lang].headerRole}
+                        {t.headerRole}
                       </motion.p>
                     </div>
                   </div>
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setLang(lang === "en" ? "am" : "en")}
-                        className="p-2 rounded-md hover:bg-gray-100"
-                        aria-label="Toggle language"
-                      >
-                        <span className="text-lg">{lang === "en" ? "🇬🇧" : "🇪🇹"}</span>
-                      </button>
                       <motion.button
-                    whileHover={{ scale: 1.1, rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-                    aria-label="Close menu"
-                  >
-                    <span className="text-2xl text-gray-500 hover:text-gray-700">×</span>
-                  </motion.button>
+                        whileHover={{ scale: 1.1, rotate: 90 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                        aria-label="Close menu"
+                      >
+                        <span className="text-2xl text-gray-500 hover:text-gray-700">×</span>
+                      </motion.button>
                     </div>
                 </div>
               </motion.div>
@@ -862,7 +809,7 @@ const Header = () => {
                     animate="visible"
                     className="space-y-4"
                   >
-                    {translations[lang].quickInfo.map((text, index) => (
+                    {t.quickInfo.map((text, index) => (
                       <motion.p
                         key={index}
                         variants={fadeInUp}
@@ -919,7 +866,7 @@ const Header = () => {
                     >
                       👋
                     </motion.span>
-                    <span>{translations[lang].getInTouch}</span>
+                    <span>{t.getInTouch}</span>
                     <motion.span
                       animate={{ x: [0, -5, 0] }}
                       transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
@@ -935,7 +882,7 @@ const Header = () => {
                   transition={{ delay: 0.6 }}
                   className="text-center text-xs text-gray-500 mt-4"
                 >
-                  {translations[lang].pressEsc.split('ESC').map((part, i, arr) => (
+                  {t.pressEsc.split('ESC').map((part, i, arr) => (
                     <span key={i}>
                       {i === 0 ? part : null}
                       {i > 0 && (

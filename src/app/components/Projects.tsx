@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useLanguage } from "../../context/LanguageContext";
 import { FaGlobe, FaGithub, FaYoutube, FaTelegramPlane } from "react-icons/fa";
 import Image from "next/image";
 
@@ -124,6 +125,7 @@ A simple beginner project that lets users **select and generate colors** using a
 ];
 
 export default function Projects() {
+  const { t } = useLanguage();
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
   useEffect(() => {
@@ -145,7 +147,7 @@ export default function Projects() {
     <>
 
       <section id="projects">
-        <h2 className="text-xl font-bold mb-6">projects</h2>
+        <h2 className="text-xl font-bold mb-6">{t.headings.projects}</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {projects.map((project, index) => (
             <div
@@ -165,7 +167,7 @@ export default function Projects() {
               )}
               {project.video && (
                 <video
-                  ref={(el) => (videoRefs.current[index] = el)}
+                  ref={(el) => { videoRefs.current[index] = el }}
                   src={project.video}
                   className="rounded-t-xl w-full h-auto object-cover"
                   playsInline

@@ -1,15 +1,15 @@
 "use client";
 
 import { FaEnvelope, FaGithub, FaLinkedin, FaTelegramPlane, FaPhone } from "react-icons/fa";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function Contact() {
+  const { t } = useLanguage();
   return (
     <>
     <section id="contacts" className="mt-8 mb-8">
-      <h2 className="text-xl font-bold mb-4">contact</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Feel free to reach out — I’d love to connect, collaborate, or just say hi 👋
-      </p>
+      <h2 className="text-xl font-bold mb-4">{t.headings.contacts}</h2>
+      <p className="text-sm text-gray-600 mb-4">{t.getInTouch}</p>
 
       <ul className="space-y-3 text-sm">
         <li className="flex items-center gap-2">

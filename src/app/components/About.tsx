@@ -5,6 +5,7 @@ import {
   Github,
   Instagram,
 } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 import { FaTelegramPlane } from "react-icons/fa";
 
 const socials = [
@@ -36,9 +37,10 @@ const socials = [
 ];
 
 export default function About() {
+  const { t } = useLanguage();
   return (
     <section id="about" className="mb-8">
-      <h2 className="text-xl font-bold text-foreground">about me</h2>
+      <h2 className="text-xl font-bold text-foreground">{t.headings.about}</h2>
 
       {/* about me */}
       <p className="text-sm mt-2 text-muted">

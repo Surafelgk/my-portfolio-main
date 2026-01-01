@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import Avatar from "./ui/Avatar";
+import { useLanguage } from "../../context/LanguageContext";
 
 const Hero = () => {
   const [glowSide, setGlowSide] = useState("");
@@ -36,6 +37,8 @@ const Hero = () => {
     "": "shadow-none"
   };
 
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-col mt-20 items-center mb-8">
       {/* Profile Section */}
@@ -44,10 +47,8 @@ const Hero = () => {
       </div>
 
       {/* Name and Title */}
-      <h1 className="text-5xl font-bold mt-5">Surafel Binalfew</h1>
-      <p className="text-2xl font-light text-gray-600 mt-1">
-       Professional, Web Developer /  Digital Marketing Specialist
-      </p>
+      <h1 className="text-5xl font-bold mt-5">{t.headings.heroName}</h1>
+      <p className="text-2xl font-light text-gray-600 mt-1">{t.headings.heroTitle}</p>
 
       {/* Glow Box - No movement, just shadow */}
       <div
@@ -56,7 +57,7 @@ const Hero = () => {
         onMouseLeave={handleMouseLeave}
         className={`text-sm text-center text-light mt-4 px-6 py-3 rounded-full max-w-xl border border-gray-300 transition-all duration-200 ${shadowMap[glowSide]}`}
       >
-        hey there, welcome to my portfolio :-). I am a passionate builder, creative problem solver, and lifelong learner.
+        {t.headings.heroIntro}
       </div>
     </div>
   );

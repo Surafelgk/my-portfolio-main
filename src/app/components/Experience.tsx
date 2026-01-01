@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useLanguage } from "../../context/LanguageContext";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 export default function Experience() {
+  const { t } = useLanguage();
   const [openSet, setOpenSet] = useState<Set<number>>(new Set());
 
   const experiences = [
@@ -179,7 +181,7 @@ export default function Experience() {
 
   return (
     <section id="experience" className="mb-6">
-      <h2 className="text-xl font-bold mb-4">experience</h2>
+      <h2 className="text-xl font-bold mb-4">{t.headings.experience}</h2>
       <div>
         {experiences.map((exp, i) => {
           const isOpen = openSet.has(i);
