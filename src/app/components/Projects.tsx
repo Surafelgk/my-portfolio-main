@@ -149,12 +149,15 @@ export default function Projects() {
                 <video
                   src={project.video}
                   className="rounded-t-xl w-full h-auto object-cover"
-                  autoPlay
-                  muted
-                  loop
                   playsInline
                   controls
-                  preload="metadata"
+                  preload="none"
+                  poster={project.image}
+                  onClick={(e) => {
+                    const v = e.currentTarget as HTMLVideoElement;
+                    if (v.paused) v.play();
+                    else v.pause();
+                  }}
                 />
               )}
           <div className="p-4">
