@@ -135,6 +135,56 @@ const Header = () => {
     []
   );
 
+  // Language state and translations
+  const [lang, setLang] = useState<"en" | "am">("en");
+
+  const translations = useMemo(() => ({
+    en: {
+      nav: {
+        about: "About",
+        experience: "Experience",
+        projects: "Projects",
+        contacts: "Contact",
+      },
+      headerRole: "Web Developer & Digital Marketer",
+      quickInfo: [
+        "Based in Addis Ababa, Ethiopia",
+        "Full-Stack Developer",
+        "Digital Marketing Specialist",
+        "Available for freelance projects",
+      ],
+      getInTouch: "Get In Touch",
+      pressEsc: "Press ESC to close",
+    },
+    am: {
+      nav: {
+        about: "ስለ እኔ",
+        experience: "ልምድ",
+        projects: "ፕሮጀክቶች",
+        contacts: "አገናኝ",
+      },
+      headerRole: "የድህረ-ድር እና ዲጂታል አሰራር",
+      quickInfo: [
+        "ከአዲስ አበባ የተመነ",
+        "Full-Stack አባል",
+        "ዲጂታል ማርኬቲንግ ስራ",
+        "ለፍሪላንስ እገኛ",
+      ],
+      getInTouch: "ያግኙኝ",
+      pressEsc: "ESC ን ይጫኑ ለመዝጋት",
+    }
+  }), []);
+
+  // Derived nav items using current language
+  const localizedNavItems: NavItem[] = useMemo(() => (
+    [
+      { id: "about", label: translations[lang].nav.about, icon: "👤" },
+      { id: "experience", label: translations[lang].nav.experience },
+      { id: "projects", label: translations[lang].nav.projects },
+      { id: "contacts", label: translations[lang].nav.contacts },
+    ]
+  ), [lang, translations]);
+
   // Smooth scroll with animation
   const scrollToSection = useCallback(async (id: string) => {
     const section = document.getElementById(id);
@@ -183,7 +233,7 @@ const Header = () => {
     observerRef.current = new IntersectionObserver(updateActiveSection, options);
 
     // Observe all sections
-    navItems.forEach((item) => {
+    localizedNavItems.forEach((item) => {
       const section = document.getElementById(item.id);
       if (section) {
         observerRef.current?.observe(section);
@@ -195,7 +245,7 @@ const Header = () => {
         observerRef.current.disconnect();
       }
     };
-  }, [navItems, headerControls]);
+  }, [localizedNavItems, headerControls]);
 
   // Header always visible - only update scroll state for styling
   useEffect(() => {
@@ -255,20 +305,20 @@ const Header = () => {
       // Number keys for quick navigation (1-4) with animation
       if (!isMobileMenuOpen && e.altKey && e.key >= "1" && e.key <= "4") {
         const index = parseInt(e.key) - 1;
-        if (navItems[index]) {
+        if (localizedNavItems[index]) {
           // Animate all nav items
           await navControls.start({
             scale: [1, 0.95, 1],
             transition: { duration: 0.2 }
           });
-          scrollToSection(navItems[index].id);
+          scrollToSection(localizedNavItems[index].id);
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMobileMenuOpen, navItems, scrollToSection, headerControls, navControls]);
+  }, [isMobileMenuOpen, localizedNavItems, scrollToSection, headerControls, navControls]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -431,7 +481,7 @@ const Header = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="hidden md:flex items-center space-x-1"
             >
-              {navItems.map((item, index) => (
+              {localizedNavItems.map((item, index) => (
                 <motion.div
                   key={item.id}
                   variants={fadeInUp}
@@ -516,6 +566,18 @@ const Header = () => {
                 </motion.div>
               ))}
             </motion.nav>
+
+            {/* Language toggle (desktop) */}
+            <div className="hidden md:flex items-center ml-3">
+              <button
+                onClick={() => setLang(lang === "en" ? "am" : "en")}
+                className="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                aria-label="Toggle language"
+              >
+                <span className="text-lg">{lang === "en" ? "🇬🇧" : "🇪🇹"}</span>
+                <span className="text-sm font-medium">{lang === "en" ? "EN" : "አማ"}</span>
+              </button>
+            </div>
 
             {/* Mobile Menu Button with Blue Theme */}
             <motion.div
@@ -676,11 +738,19 @@ const Header = () => {
                         transition={{ delay: 0.3 }}
                         className="text-sm text-gray-600"
                       >
-                        Web Developer & Digital Marketer
+                          {translations[lang].headerRole}
                       </motion.p>
                     </div>
                   </div>
-                  <motion.button
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setLang(lang === "en" ? "am" : "en")}
+                        className="p-2 rounded-md hover:bg-gray-100"
+                        aria-label="Toggle language"
+                      >
+                        <span className="text-lg">{lang === "en" ? "🇬🇧" : "🇪🇹"}</span>
+                      </button>
+                      <motion.button
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -689,6 +759,7 @@ const Header = () => {
                   >
                     <span className="text-2xl text-gray-500 hover:text-gray-700">×</span>
                   </motion.button>
+                    </div>
                 </div>
               </motion.div>
 
@@ -700,7 +771,7 @@ const Header = () => {
                   animate="visible"
                   className="space-y-2"
                 >
-                  {navItems.map((item, index) => (
+                  {localizedNavItems.map((item, index) => (
                     <motion.div
                       key={item.id}
                       variants={fadeInUp}
@@ -791,12 +862,7 @@ const Header = () => {
                     animate="visible"
                     className="space-y-4"
                   >
-                    {[
-                      "Based in Addis Ababa, Ethiopia",
-                      "Full-Stack Developer",
-                      "Digital Marketing Specialist",
-                      "Available for freelance projects"
-                    ].map((text, index) => (
+                    {translations[lang].quickInfo.map((text, index) => (
                       <motion.p
                         key={index}
                         variants={fadeInUp}
@@ -853,7 +919,7 @@ const Header = () => {
                     >
                       👋
                     </motion.span>
-                    <span>Get In Touch</span>
+                    <span>{translations[lang].getInTouch}</span>
                     <motion.span
                       animate={{ x: [0, -5, 0] }}
                       transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
@@ -869,7 +935,15 @@ const Header = () => {
                   transition={{ delay: 0.6 }}
                   className="text-center text-xs text-gray-500 mt-4"
                 >
-                  Press <kbd className="px-2 py-1 bg-gray-100 rounded-lg text-gray-600 shadow-inner">ESC</kbd> to close
+                  {translations[lang].pressEsc.split('ESC').map((part, i, arr) => (
+                    <span key={i}>
+                      {i === 0 ? part : null}
+                      {i > 0 && (
+                        <kbd className="px-2 py-1 bg-gray-100 rounded-lg text-gray-600 shadow-inner">ESC</kbd>
+                      )}
+                      {i < arr.length - 1 ? arr[i+1] : ''}
+                    </span>
+                  ))}
                 </motion.p>
               </motion.div>
             </motion.div>
