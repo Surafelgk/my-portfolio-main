@@ -133,14 +133,54 @@ export default function Projects() {
       if (!v) return;
       try {
         v.muted = true;
+        v.defaultMuted = true;
         v.setAttribute("playsinline", "");
         v.setAttribute("webkit-playsinline", "");
-        const p = v.play();
-        if (p && typeof p.then === "function") p.catch(() => {});
+
+        const tryPlay = () => {
+          const p = v.play();
+          if (p && typeof p.then === "function") p.catch(() => {});
+        };
+
+        // Try to play immediately
+        tryPlay();
+
+        // Also attempt playback when the video can play to handle timing issues
+        const onCanPlay = () => tryPlay();
+        v.addEventListener("canplay", onCanPlay);
+        // cleanup listener when unmounting
+        // store listener reference on element to remove later if needed
+        (v as any).__onCanPlay = onCanPlay;
       } catch (e) {
         // ignore
       }
     });
+    // Some mobile browsers require a user interaction to start playback even for muted videos.
+    // Add a one-time touch/click listener to start videos on first user gesture as a fallback.
+    const userPlay = () => {
+      videoRefs.current.forEach((v) => {
+        if (!v) return;
+        try {
+          const p = v.play();
+          if (p && typeof p.then === "function") p.catch(() => {});
+        } catch (e) {}
+      });
+      document.removeEventListener("touchstart", userPlay);
+      document.removeEventListener("click", userPlay);
+    };
+
+    document.addEventListener("touchstart", userPlay, { once: true });
+    document.addEventListener("click", userPlay, { once: true });
+
+    return () => {
+      videoRefs.current.forEach((v) => {
+        if (!v) return;
+        const handler = (v as any).__onCanPlay;
+        if (handler) v.removeEventListener("canplay", handler);
+      });
+      document.removeEventListener("touchstart", userPlay);
+      document.removeEventListener("click", userPlay);
+    };
   }, []);
 
   return (
@@ -171,9 +211,9 @@ export default function Projects() {
                   src={project.video}
                   className="rounded-t-xl w-full h-auto object-cover"
                   playsInline
-                  controls
                   autoPlay
                   muted
+                  defaultMuted
                   loop
                   preload="auto"
                   poster={project.image}
