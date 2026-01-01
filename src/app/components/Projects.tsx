@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { FaGlobe, FaGithub, FaYoutube, FaTelegramPlane } from "react-icons/fa";
 import Image from "next/image";
@@ -127,61 +127,39 @@ A simple beginner project that lets users **select and generate colors** using a
 export default function Projects() {
   const { t } = useLanguage();
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
+  const [isPlaying, setIsPlaying] = useState<boolean[]>(projects.map(() => false));
 
-  useEffect(() => {
-    videoRefs.current.forEach((v) => {
-      if (!v) return;
-      try {
-        v.muted = true;
-        v.defaultMuted = true;
-        v.setAttribute("playsinline", "");
-        v.setAttribute("webkit-playsinline", "");
-
-        const tryPlay = () => {
-          const p = v.play();
-          if (p && typeof p.then === "function") p.catch(() => {});
-        };
-
-        // Try to play immediately
-        tryPlay();
-
-        // Also attempt playback when the video can play to handle timing issues
-        const onCanPlay = () => tryPlay();
-        v.addEventListener("canplay", onCanPlay);
-        // cleanup listener when unmounting
-        // store listener reference on element to remove later if needed
-        (v as any).__onCanPlay = onCanPlay;
-      } catch (e) {
-        // ignore
-      }
-    });
-    // Some mobile browsers require a user interaction to start playback even for muted videos.
-    // Add a one-time touch/click listener to start videos on first user gesture as a fallback.
-    const userPlay = () => {
-      videoRefs.current.forEach((v) => {
-        if (!v) return;
-        try {
-          const p = v.play();
-          if (p && typeof p.then === "function") p.catch(() => {});
-        } catch (e) {}
+  // Play a specific video when user clicks the overlay play button
+  const handlePlay = (index: number) => {
+    const v = videoRefs.current[index];
+    if (!v) return;
+    // ensure playsinline for mobile
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+    const p = v.play();
+    if (p && typeof p.then === "function") {
+      p.then(() => {
+        setIsPlaying((prev) => {
+          const copy = [...prev];
+          copy[index] = true;
+          return copy;
+        });
+      }).catch(() => {
+        // Still mark as playing to show controls even if autoplay failed
+        setIsPlaying((prev) => {
+          const copy = [...prev];
+          copy[index] = true;
+          return copy;
+        });
       });
-      document.removeEventListener("touchstart", userPlay);
-      document.removeEventListener("click", userPlay);
-    };
-
-    document.addEventListener("touchstart", userPlay, { once: true });
-    document.addEventListener("click", userPlay, { once: true });
-
-    return () => {
-      videoRefs.current.forEach((v) => {
-        if (!v) return;
-        const handler = (v as any).__onCanPlay;
-        if (handler) v.removeEventListener("canplay", handler);
+    } else {
+      setIsPlaying((prev) => {
+        const copy = [...prev];
+        copy[index] = true;
+        return copy;
       });
-      document.removeEventListener("touchstart", userPlay);
-      document.removeEventListener("click", userPlay);
-    };
-  }, []);
+    }
+  };
 
   return (
     <>
@@ -206,19 +184,33 @@ export default function Projects() {
                 />
               )}
               {project.video && (
-                <video
-                  ref={(el) => { videoRefs.current[index] = el }}
-                  src={project.video}
-                  className="rounded-t-xl w-full h-auto object-cover"
-                  playsInline
-                  autoPlay
-                  muted
-              
-                  loop
-                  preload="auto"
-                  poster={project.image}
-                  style={{ backgroundColor: "#000" }}
-                />
+                <div className="relative">
+                  <video
+                    ref={(el) => { videoRefs.current[index] = el }}
+                    src={project.video}
+                    className="rounded-t-xl w-full h-auto object-cover"
+                    playsInline
+                    loop
+                    preload="metadata"
+                    poster={project.image}
+                    style={{ backgroundColor: "#000" }}
+                    controls={isPlaying[index]}
+                  />
+
+                  {!isPlaying[index] && (
+                    <button
+                      onClick={() => handlePlay(index)}
+                      aria-label={`Play ${project.title}`}
+                      className="absolute inset-0 flex items-center justify-center rounded-t-xl bg-black/30"
+                    >
+                      <div className="w-14 h-14 bg-white/95 rounded-full flex items-center justify-center shadow-lg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 5v14l11-7L8 5z" fill="#000" />
+                        </svg>
+                      </div>
+                    </button>
+                  )}
+                </div>
               )}
           <div className="p-4">
               <h3 className="text-lg font-semibold">{project.title}</h3>
