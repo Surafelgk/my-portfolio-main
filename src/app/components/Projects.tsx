@@ -213,7 +213,7 @@ export default function Projects() {
                   playsInline
                   autoPlay
                   muted
-                  defaultMuted
+              
                   loop
                   preload="auto"
                   poster={project.image}
