@@ -71,7 +71,7 @@ A simple beginner project that lets users **select and generate colors** using a
       "Canva",
       
     ],
-    video: "15.mp4",
+    video: "/15.mp4",
     source: "https://t.me/Portfoliosura",
   },
 //   {
@@ -140,19 +140,21 @@ export default function Projects() {
                   alt={project.title}
                   width={600}
                   height={400}
-                  className="rounded-t-xl w-full h-40 object-cover"
+                  className="rounded-t-xl w-full h-auto object-cover"
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  loading="lazy"
                 />
               )}
               {project.video && (
                 <video
                   src={project.video}
-                  width={600}
-                  height={400}
-                  className="rounded-t-xl w-full h-40 object-cover"
+                  className="rounded-t-xl w-full h-auto object-cover"
                   autoPlay
                   muted
                   loop
                   playsInline
+                  controls
+                  preload="metadata"
                 />
               )}
           <div className="p-4">
