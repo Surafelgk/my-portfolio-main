@@ -414,11 +414,9 @@ const Header = () => {
                 <div className="relative">
                   {/* Blue glow effect on hover */}
                   <motion.div
-                    className="absolute -inset-3 bg-gradient-to-r from-blue-600 to-blue-800 rounded-full"
-                    animate={{
-                      opacity: isLogoHovered ? [0.1, 0.2, 0.1] : 0
-                    }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="absolute -inset-3 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 blur-2xl"
+                    animate={isLogoHovered ? { opacity: [0.06, 0.18, 0.06], rotate: [0, 8, 0] } : { opacity: 0 }}
+                    transition={{ duration: 1.6, repeat: Infinity }}
                   />
                   
                   <Image
@@ -931,20 +929,28 @@ const Header = () => {
                 className="relative max-w-[420px] w-full bg-white rounded-lg shadow-md p-3"
                 onClick={(e) => e.stopPropagation()}
               >
-                <Image
-                  src="/segni-pic2.jpg"
-                  alt="Surafel Binalfew"
-                  width={800}
-                  height={800}
-                  className="w-full h-auto rounded-md object-cover"
+                {/* Neon frame */}
+                <motion.div
+                  className="absolute -inset-1 rounded-lg blur-lg bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 opacity-60 z-0"
+                  animate={{ opacity: [0.35, 0.65, 0.35], rotate: [0, 2, 0] }}
+                  transition={{ duration: 2.2, repeat: Infinity }}
                 />
-                <button
-                  onClick={() => setIsImageOpen(false)}
-                  aria-label="Close image"
-                  className="absolute top-2 right-2 p-1 rounded-full bg-white text-gray-700 border"
-                >
-                  ×
-                </button>
+                <div className="relative z-10">
+                  <Image
+                    src="/segni-pic2.jpg"
+                    alt="Surafel Binalfew"
+                    width={800}
+                    height={800}
+                    className="w-full h-auto rounded-md object-cover"
+                  />
+                  <button
+                    onClick={() => setIsImageOpen(false)}
+                    aria-label="Close image"
+                    className="absolute top-2 right-2 p-1 rounded-full bg-white text-gray-700 border"
+                  >
+                    ×
+                  </button>
+                </div>
               </motion.div>
             </motion.div>
           )}
