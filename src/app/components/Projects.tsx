@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { FaGlobe, FaGithub, FaYoutube, FaTelegramPlane } from "react-icons/fa";
 import Image from "next/image";
 
@@ -123,6 +124,23 @@ A simple beginner project that lets users **select and generate colors** using a
 ];
 
 export default function Projects() {
+  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
+
+  useEffect(() => {
+    videoRefs.current.forEach((v) => {
+      if (!v) return;
+      try {
+        v.muted = true;
+        v.setAttribute("playsinline", "");
+        v.setAttribute("webkit-playsinline", "");
+        const p = v.play();
+        if (p && typeof p.then === "function") p.catch(() => {});
+      } catch (e) {
+        // ignore
+      }
+    });
+  }, []);
+
   return (
     <>
 
@@ -147,6 +165,7 @@ export default function Projects() {
               )}
               {project.video && (
                 <video
+                  ref={(el) => (videoRefs.current[index] = el)}
                   src={project.video}
                   className="rounded-t-xl w-full h-auto object-cover"
                   playsInline
