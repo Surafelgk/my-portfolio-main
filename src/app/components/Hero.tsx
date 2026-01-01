@@ -46,7 +46,7 @@ const Hero = () => {
       {/* Name and Title */}
       <h1 className="text-5xl font-bold mt-5">Surafel Binalfew</h1>
       <p className="text-2xl font-light text-gray-600 mt-1">
-       Professional, Web Developer /  Digital Marketing
+       Professional, Web Developer /  Digital Marketing Specialist
       </p>
 
       {/* Glow Box - No movement, just shadow */}
