@@ -151,13 +151,12 @@ export default function Projects() {
                   className="rounded-t-xl w-full h-auto object-cover"
                   playsInline
                   controls
-                  preload="none"
+                  autoPlay
+                  muted
+                  loop
+                  preload="auto"
                   poster={project.image}
-                  onClick={(e) => {
-                    const v = e.currentTarget as HTMLVideoElement;
-                    if (v.paused) v.play();
-                    else v.pause();
-                  }}
+                  style={{ backgroundColor: "#000" }}
                 />
               )}
           <div className="p-4">
