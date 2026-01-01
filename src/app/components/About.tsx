@@ -12,27 +12,27 @@ const socials = [
   {
     name: "Resume",
     href: "https://docs.google.com/document/d/1gHW8rsWNV2bzkkkkL_nwGwe-41yTfNqX4rC20nije7IVX8/edit?usp=sharing",
-    icon: <FileText size={32} className="group-hover:text-blue-500 transition-colors duration-300" />,
+    icon: <FileText size={32} className="text-[#2563eb] group-hover:text-[#1e40af] transition-colors duration-300" />,
   },
   {
     name: "Telegram",
     href: "https://t.me/surafel_gk",
-    icon: <FaTelegramPlane size={32} className="group-hover:text-blue-500 transition-colors duration-300" />,
+    icon: <FaTelegramPlane size={32} className="text-[#0088cc] group-hover:text-[#0077b6] transition-colors duration-300" />,
   },
   {
     name: "LinkedIn",
     href: "https://www.linkedin.com/in/surafelbinalfew",
-    icon: <Linkedin size={32} className="group-hover:text-blue-600 transition-colors duration-300" />,
+    icon: <Linkedin size={32} className="text-[#0A66C2] group-hover:text-[#084b87] transition-colors duration-300" />,
   },
   {
     name: "GitHub",
     href: "https://github.com/surafelgk",
-    icon: <Github size={32} className="group-hover:text-black dark:group-hover:text-black transition-colors duration-300" />,
+    icon: <Github size={32} className="text-[#181717] group-hover:text-[#0f0f0f] transition-colors duration-300" />,
   },
   {
     name: "Instagram",
     href: "https://www.instagram.com/surafelgk/",
-    icon: <Instagram size={32} className="group-hover:text-blue-300 transition-colors duration-300" />,
+    icon: <Instagram size={32} className="text-[#E1306C] group-hover:text-[#C13584] transition-colors duration-300" />,
   },
 ];
 

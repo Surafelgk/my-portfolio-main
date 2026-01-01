@@ -28,7 +28,7 @@ const projects: Project[] = [
     tags: ["HTML","CSS", "Javascript", "Bootstrap", ],
     video: "/12.mp4",
     website: "",
-    source: "/https://github.com/Segnit11/ChurnPrediction.git"
+    source: "https://github.com/surafelgk"
   },
   {
     title: "Netflix Clone",

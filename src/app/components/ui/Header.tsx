@@ -90,6 +90,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false);
+  const [isImageOpen, setIsImageOpen] = useState(false);
   
   const headerRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -284,6 +285,16 @@ const Header = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen, localizedNavItems, scrollToSection, headerControls, navControls]);
 
+  // Close image modal on Escape
+  useEffect(() => {
+    if (!isImageOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsImageOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isImageOpen]);
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -415,8 +426,13 @@ const Header = () => {
                     alt="Surafel Binalfew"
                     width={48}
                     height={48}
-                    className="rounded-full object-cover border-2 border-white shadow-lg relative z-10"
+                    className="rounded-full object-cover border-2 border-white shadow-lg relative z-10 cursor-pointer"
                     priority
+                    onClick={(e) => {
+                      // prevent the logo button's click (scroll to top) when opening image
+                      e.stopPropagation();
+                      setIsImageOpen(true);
+                    }}
                   />
                   
                   {/* Active indicator dot with blue color */}
@@ -897,7 +913,43 @@ const Header = () => {
           </>
         )}
       </AnimatePresence>
-    </>
+        {/* Image lightbox/modal */}
+        <AnimatePresence>
+          {isImageOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-60 flex items-center justify-center bg-black/30"
+              onClick={() => setIsImageOpen(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.98 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.98 }}
+                transition={{ type: "spring", damping: 22, stiffness: 260 }}
+                className="relative max-w-[420px] w-full bg-white rounded-lg shadow-md p-3"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Image
+                  src="/segni-pic2.jpg"
+                  alt="Surafel Binalfew"
+                  width={800}
+                  height={800}
+                  className="w-full h-auto rounded-md object-cover"
+                />
+                <button
+                  onClick={() => setIsImageOpen(false)}
+                  aria-label="Close image"
+                  className="absolute top-2 right-2 p-1 rounded-full bg-white text-gray-700 border"
+                >
+                  ×
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
   );
 };
 

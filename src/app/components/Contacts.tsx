@@ -13,21 +13,21 @@ export default function Contact() {
 
       <ul className="space-y-3 text-sm">
         <li className="flex items-center gap-2">
-          <FaEnvelope className="text-gray-500 text-xl" />
+          <FaEnvelope className="text-[#D44638] text-xl" />
           <a href="mailto:surafelgk@gmail.com" className="text-blue-500 underline">
             surafelgk@gmail.com
           </a>
         </li>
 
         <li className="flex items-center gap-2">
-          <FaPhone className="text-gray-500 text-xl" />
+          <FaPhone className="text-[#10B981] text-xl" />
           <a href="tel:+251947510525" className="text-blue-500 underline">
             +251 94 751 0525
           </a>
         </li>
 
         <li className="flex items-center gap-2">
-          <FaLinkedin className="text-gray-500 text-xl" />
+          <FaLinkedin className="text-[#0A66C2] text-xl" />
           <a
             href="https://www.linkedin.com/in/surafelbinalfew/"
             target="_blank"
@@ -39,7 +39,7 @@ export default function Contact() {
         </li>
 
         <li className="flex items-center gap-2">
-          <FaTelegramPlane className="text-gray-500 text-xl" />
+          <FaTelegramPlane className="text-[#0088cc] text-xl" />
           <a
             href="https://t.me/surafel_gk"
             target="_blank"
@@ -51,7 +51,7 @@ export default function Contact() {
         </li>
 
         <li className="flex items-center gap-2">
-          <FaGithub className="text-gray-500 text-xl" />
+          <FaGithub className="text-[#181717] text-xl" />
           <a
             href="https://github.com/Surafelgk/"
             target="_blank"
