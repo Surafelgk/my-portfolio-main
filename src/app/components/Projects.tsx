@@ -26,7 +26,7 @@ const projects: Project[] = [
     Zure Addis is a digital marketing and creative agency based in Addis Ababa, Ethiopia. It focuses on helping businesses grow their brand online through services like digital strategy, social media marketing, content creation, branding, and design. The company positions itself as a modern marketing partner that builds engaging, audience-focused campaigns and visual identities tailored to local and global markets.
     `,
     tags: ["HTML","CSS", "Javascript", "Bootstrap", ],
-    video: "/12.mp4",
+    video: "/12.mp4" autoplay muted loop></video>,
     website: "",
     source: "https://github.com/surafelgk"
   },
