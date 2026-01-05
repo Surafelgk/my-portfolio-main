@@ -44,7 +44,7 @@ This is my **first web development project**, where I built a Netflix-style inte
       "Javascript",
       
     ],
-    video: "/13.mp4",
+    video: "/13.mp4"autoplay muted loop></video>,
     website: "",
     source: "https://github.com/surafelgk",
   },
